@@ -1,0 +1,17 @@
+
+
+$azContext = Get-AzContext
+$azProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
+$profileClient = New-Object -TypeName Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient -ArgumentList ($azProfile)
+$token = $profileClient.AcquireAccessToken($azContext.Subscription.TenantId)
+$authHeader = @{
+    'Content-Type'='application/json'
+    'Authorization'='Bearer ' + $token.AccessToken
+}
+
+# Invoke the REST API
+$restUri = 'https://management.azure.com/subscriptions/d47503e4-69c2-42f5-b50b-ef57d5cd24de/resourceGroups/WVD-RG/providers/Microsoft.Network/networkInterfaces?api-version=2020-11-01'
+$response = Invoke-RestMethod -Uri $restUri -Method Get -Headers $authHeader
+$response.value
+$response.value.properties
+$response.value.properties.ipConfiguration
