@@ -1,2 +1,2 @@
-//login to azure
+//login to Azure
 az login -u mzimmer@bradyrandolph.com
